@@ -4,6 +4,7 @@ var WIDTH_PIN = 62;
 var HEIGHT_PIN = 82;
 var map = document.querySelector('.map');
 var buttonMapPin = document.querySelector('.map__pin');
+// var mapCard = document.querySelector('.map__card');
 
 function getRandomInteger(min, max) {
   return min + Math.floor(Math.random() * (max + 1 - min));
@@ -84,13 +85,14 @@ var data = generateData();
 map.classList.remove('map--faded');
 
 function generatePin(pinData) {
-  var clone = buttonMapPin.cloneNode(true);
-  var image = clone.querySelector('img');
+  var clonePin = buttonMapPin.cloneNode(true);
+  var image = clonePin.querySelector('img');
 
-  clone.style.left = pinData.location.x + WIDTH_PIN / 2 + 'px';
-  clone.style.top = pinData.location.y + HEIGHT_PIN + 'px';
+  clonePin.style.left = pinData.location.x + WIDTH_PIN / 2 + 'px';
+  clonePin.style.top = pinData.location.y + HEIGHT_PIN + 'px';
   image.src = pinData.author.avatar;
   image.alt = pinData.offer.title;
 }
 
-var pin = generatePin(data[0]);
+
+generatePin(data[0]);
