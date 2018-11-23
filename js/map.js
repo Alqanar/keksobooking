@@ -85,8 +85,6 @@ function generateData() {
   return arr;
 }
 
-var data = generateData();
-
 map.classList.remove('map--faded');
 
 function generatePin(pinData) {
@@ -165,6 +163,20 @@ function generateCard(cardData) {
   return cloneCard;
 }
 
+var data = generateData();
 
-generatePin(data[0]);
+function outputPin(inf) {
+  var pinFragment = document.createDocumentFragment();
+  var locationPin = document.querySelector('.map__pins');
+
+  for (var i = 0; i < inf.length; i++) {
+    pinFragment.appendChild(generatePin(inf[i]));
+  }
+
+  return locationPin.appendChild(pinFragment);
+}
+
+outputPin(data);
+
+
 generateCard(data[3]);
