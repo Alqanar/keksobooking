@@ -10,6 +10,8 @@ var RUS_TYPE = {
 };
 var map = document.querySelector('.map');
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
+var locationPin = document.querySelector('.map__pins');
+var filtersContainer = document.querySelector('.map__filters-container');
 var mapCard = document.querySelector('#card').content.querySelector('.map__card');
 
 function getRandomInteger(min, max) {
@@ -165,22 +167,19 @@ function generateCard(cardData) {
 
 var data = generateData();
 
-function outputPin(inf) {
+function outputPins(info) {
   var pinFragment = document.createDocumentFragment();
-  var locationPin = document.querySelector('.map__pins');
 
-  for (var i = 0; i < inf.length; i++) {
-    pinFragment.appendChild(generatePin(inf[i]));
+  for (var i = 0; i < info.length; i++) {
+    pinFragment.appendChild(generatePin(info[i]));
   }
 
   return locationPin.appendChild(pinFragment);
 }
 
-function outputCard(elemArr) {
-  var filtersContainer = document.querySelector('.map__filters-container');
-
-  return filtersContainer.before(generateCard(elemArr));
+function outputCard(adObject) {
+  return filtersContainer.before(generateCard(adObject));
 }
 
-outputPin(data);
+outputPins(data);
 outputCard(data[0]);
