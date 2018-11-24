@@ -176,7 +176,11 @@ function outputPin(inf) {
   return locationPin.appendChild(pinFragment);
 }
 
+function outputCard(elemArr) {
+  var filtersContainer = document.querySelector('.map__filters-container');
+
+  return filtersContainer.before(generateCard(elemArr));
+}
+
 outputPin(data);
-
-
-generateCard(data[3]);
+outputCard(data[0]);
