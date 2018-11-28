@@ -87,8 +87,6 @@ function generateData() {
   return arr;
 }
 
-map.classList.remove('map--faded');
-
 function generatePin(pinData) {
   var clonePin = templatePin.cloneNode(true);
   var image = clonePin.querySelector('img');
@@ -181,5 +179,54 @@ function outputCard(adObject) {
   return filtersContainer.before(generateCard(adObject));
 }
 
-outputPins(data);
-outputCard(data[0]);
+// COMMENT fourth task
+
+var filterAd = document.querySelector('.map__filters');
+var formAd = document.querySelector('.ad-form');
+var mainPin = document.querySelector('.map__pin--main');
+
+function addDisabledToForm(selector) {
+  var elems = selector.querySelectorAll('.' + selector.className.replace(' ', '.') + ' > *');
+
+  for (var i = 0; i < elems.length; i++) {
+    elems[i].setAttribute('disabled', 'disabled');
+  }
+}
+
+function removeDisabledToForm(selector) {
+  var elems = selector.querySelectorAll('.' + selector.className.replace(' ', '.') + ' > *');
+
+  for (var i = 0; i < elems.length; i++) {
+    elems[i].removeAttribute('disabled');
+  }
+}
+
+function removePins(list) {
+  for (var i = 0; i < list.length; i++) {
+    list[i].remove();
+  }
+}
+
+function switchingMap() {
+  var classListMap = map.classList;
+  var classListFormAd = formAd.classList;
+  var listMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  var cardAd = document.querySelector('.map__card');
+
+  classListMap.toggle('map--faded');
+  classListFormAd.toggle('ad-form--disabled');
+
+  if (classListMap.contains('map--faded')) {
+    addDisabledToForm(filterAd);
+    addDisabledToForm(formAd);
+    removePins(listMapPins);
+    cardAd.remove();
+  } else {
+    outputPins(data);
+    outputCard(data[0]);
+    removeDisabledToForm(filterAd);
+    removeDisabledToForm(formAd);
+  }
+}
+
+mainPin.addEventListener('click', switchingMap);
