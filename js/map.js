@@ -63,6 +63,8 @@ function generateData() {
     };
 
     arr.push({
+      'id': i,
+
       'author': {
         'avatar': 'img/avatars/user0' + avatarNums[i] + '.png'
       },
@@ -93,6 +95,7 @@ function generatePin(pinData) {
 
   clonePin.style.left = pinData.location.x - WIDTH_PIN / 2 + 'px';
   clonePin.style.top = pinData.location.y - HEIGHT_PIN + 'px';
+  clonePin.setAttribute('pin-id', pinData.id);
   image.src = pinData.author.avatar;
   image.alt = pinData.offer.title;
 
@@ -176,7 +179,11 @@ function outputPins(info) {
 }
 
 function outputCard(adObject) {
-  return filtersContainer.before(generateCard(adObject));
+  var result = filtersContainer.before(generateCard(adObject));
+  document.querySelector('.popup__close').addEventListener('click', function remove() {
+    document.querySelector('.map__card').remove();
+  });
+  return result;
 }
 
 // COMMENT fourth task
@@ -242,3 +249,21 @@ function getCoordinatesHandler(event) {
 
 mainPin.addEventListener('mouseup', getCoordinatesHandler);
 
+function paintCardOfElem(event) {
+  var cardAd = document.querySelector('.map__card');
+  var target = event.target;
+
+  while (target !== locationPin) {
+
+    if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
+      if (cardAd) {
+        cardAd.remove();
+      }
+      outputCard(data[target.getAttribute('pin-id')]);
+      return;
+    }
+    target = target.parentNode;
+  }
+}
+
+locationPin.addEventListener('click', paintCardOfElem);
