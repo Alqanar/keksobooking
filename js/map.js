@@ -184,20 +184,13 @@ function outputCard(adObject) {
 var filterAd = document.querySelector('.map__filters');
 var formAd = document.querySelector('.ad-form');
 var mainPin = document.querySelector('.map__pin--main');
+var fieldAddress = document.querySelector('#address');
 
-function addDisabledToForm(selector) {
-  var elems = selector.querySelectorAll('.' + selector.className.replace(' ', '.') + ' > *');
-
-  for (var i = 0; i < elems.length; i++) {
-    elems[i].setAttribute('disabled', 'disabled');
-  }
-}
-
-function removeDisabledToForm(selector) {
-  var elems = selector.querySelectorAll('.' + selector.className.replace(' ', '.') + ' > *');
+function switchDisabledToForm(element) {
+  var elems = element.querySelectorAll('.' + element.className.replace(' ', '.') + ' > *');
 
   for (var i = 0; i < elems.length; i++) {
-    elems[i].removeAttribute('disabled');
+    elems[i].disabled = !elems[i].disabled;
   }
 }
 
@@ -207,26 +200,45 @@ function removePins(list) {
   }
 }
 
-function switchingMap() {
-  var classListMap = map.classList;
-  var classListFormAd = formAd.classList;
+function switchingMapHandler() {
   var listMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   var cardAd = document.querySelector('.map__card');
 
-  classListMap.toggle('map--faded');
-  classListFormAd.toggle('ad-form--disabled');
+  map.classList.toggle('map--faded');
+  formAd.classList.toggle('ad-form--disabled');
+  switchDisabledToForm(filterAd);
+  switchDisabledToForm(formAd);
 
-  if (classListMap.contains('map--faded')) {
-    addDisabledToForm(filterAd);
-    addDisabledToForm(formAd);
+  if (map.classList.contains('map--faded')) {
     removePins(listMapPins);
     cardAd.remove();
   } else {
     outputPins(data);
     outputCard(data[0]);
-    removeDisabledToForm(filterAd);
-    removeDisabledToForm(formAd);
   }
 }
 
-mainPin.addEventListener('click', switchingMap);
+switchDisabledToForm(filterAd);
+switchDisabledToForm(formAd);
+
+mainPin.addEventListener('click', switchingMapHandler);
+
+fieldAddress.setAttribute('value', map.offsetWidth / 2 + ', ' + map.offsetHeight / 2);
+
+function getRelativeCoords(x, y) {
+  return {
+    xCoord: x - (document.documentElement.clientWidth - map.offsetWidth) / 2,
+    yCoord: y + window.pageYOffset
+  };
+}
+
+function getCoordinatesHandler(event) {
+  var coords = getRelativeCoords(event.clientX, event.clientY);
+
+  fieldAddress.setAttribute('value', coords.xCoord + ', ' + coords.yCoord);
+  mainPin.style.left = coords.xCoord - WIDTH_PIN / 2 + 'px';
+  mainPin.style.top = coords.yCoord - HEIGHT_PIN + 'px';
+}
+
+mainPin.addEventListener('mouseup', getCoordinatesHandler);
+
