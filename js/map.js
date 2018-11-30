@@ -63,6 +63,8 @@ function generateData() {
     };
 
     arr.push({
+      'id': i,
+
       'author': {
         'avatar': 'img/avatars/user0' + avatarNums[i] + '.png'
       },
@@ -87,14 +89,13 @@ function generateData() {
   return arr;
 }
 
-map.classList.remove('map--faded');
-
 function generatePin(pinData) {
   var clonePin = templatePin.cloneNode(true);
   var image = clonePin.querySelector('img');
 
   clonePin.style.left = pinData.location.x - WIDTH_PIN / 2 + 'px';
   clonePin.style.top = pinData.location.y - HEIGHT_PIN + 'px';
+  clonePin.setAttribute('pin-id', pinData.id);
   image.src = pinData.author.avatar;
   image.alt = pinData.offer.title;
 
@@ -145,24 +146,28 @@ function fillPhoto(photos, photosContainer) {
 }
 
 function generateCard(cardData) {
-  var cloneCard = mapCard.cloneNode(true);
-  var featuresContainer = cloneCard.querySelector('.popup__features');
-  var photosContainer = cloneCard.querySelector('.popup__photos');
+  var clonedCard = mapCard.cloneNode(true);
+  var featuresContainer = clonedCard.querySelector('.popup__features');
+  var photosContainer = clonedCard.querySelector('.popup__photos');
 
-  cloneCard.querySelector('img').src = cardData.author.avatar;
-  cloneCard.querySelector('.popup__title').textContent = cardData.offer.title;
-  cloneCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
-  cloneCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
-  cloneCard.querySelector('.popup__type').textContent = RUS_TYPE[cardData.offer.type];
-  cloneCard
+  clonedCard.querySelector('img').src = cardData.author.avatar;
+  clonedCard.querySelector('.popup__title').textContent = cardData.offer.title;
+  clonedCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
+  clonedCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
+  clonedCard.querySelector('.popup__type').textContent = RUS_TYPE[cardData.offer.type];
+  clonedCard
     .querySelector('.popup__text--capacity')
     .textContent = cardData.offer.rooms + ' ' + getCaseForRoom(cardData.offer.rooms) + ' для ' + cardData.offer.guests + ' ' + getCaseForGuest(cardData.offer.guests);
-  cloneCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
+  clonedCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
   fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer);
-  cloneCard.querySelector('.popup__description').textContent = cardData.offer.description;
+  clonedCard.querySelector('.popup__description').textContent = cardData.offer.description;
   fillPhoto(cardData.offer.photos, photosContainer);
 
-  return cloneCard;
+  clonedCard.querySelector('.popup__close').addEventListener('click', function remove() {
+    clonedCard.remove();
+  });
+
+  return clonedCard;
 }
 
 var data = generateData();
@@ -178,8 +183,65 @@ function outputPins(info) {
 }
 
 function outputCard(adObject) {
-  return filtersContainer.before(generateCard(adObject));
+  filtersContainer.before(generateCard(adObject));
 }
 
-outputPins(data);
-outputCard(data[0]);
+// COMMENT fourth task
+
+var filterAd = document.querySelector('.map__filters');
+var formAd = document.querySelector('.ad-form');
+var mainPin = document.querySelector('.map__pin--main');
+var fieldAddress = document.querySelector('#address');
+
+function switchDisabledToForm(element) {
+  var elems = element.querySelectorAll('.' + element.className.replace(' ', '.') + ' > *');
+
+  for (var i = 0; i < elems.length; i++) {
+    elems[i].disabled = !elems[i].disabled;
+  }
+}
+
+function mainPinMouseUpHandler() {
+
+  map.classList.toggle('map--faded');
+  formAd.classList.toggle('ad-form--disabled');
+  switchDisabledToForm(filterAd);
+  switchDisabledToForm(formAd);
+  outputPins(data);
+  outputCard(data[0]);
+
+  mainPin.removeEventListener('click', mainPinMouseUpHandler);
+
+}
+
+switchDisabledToForm(filterAd);
+switchDisabledToForm(formAd);
+
+mainPin.addEventListener('click', mainPinMouseUpHandler);
+
+function setAddress(coords) {
+  fieldAddress.value = coords.x + ', ' + coords.y;
+}
+
+function getCoordinates() {
+  return {
+    x: mainPin.offsetLeft + WIDTH_PIN / 2,
+    y: mainPin.offsetTop + HEIGHT_PIN
+  };
+}
+
+setAddress(getCoordinates());
+
+function pinClickHandler(event) {
+  var cardAd = document.querySelector('.map__card');
+  var target = event.target;
+  var pin = target.closest('.map__pin:not(.map__pin--main)');
+  if (pin) {
+    if (cardAd) {
+      cardAd.remove();
+    }
+    outputCard(data[pin.getAttribute('pin-id')]);
+  }
+}
+
+locationPin.addEventListener('click', pinClickHandler);
