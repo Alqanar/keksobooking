@@ -201,69 +201,47 @@ function switchDisabledToForm(element) {
   }
 }
 
-function removePins(list) {
-  for (var i = 0; i < list.length; i++) {
-    list[i].remove();
-  }
-}
-
-function switchingMapHandler() {
-  var listMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  var cardAd = document.querySelector('.map__card');
+function mainPinMouseUpHandler() {
 
   map.classList.toggle('map--faded');
   formAd.classList.toggle('ad-form--disabled');
   switchDisabledToForm(filterAd);
   switchDisabledToForm(formAd);
+  outputPins(data);
+  outputCard(data[0]);
 
-  if (map.classList.contains('map--faded')) {
-    removePins(listMapPins);
-    cardAd.remove();
-  } else {
-    outputPins(data);
-    outputCard(data[0]);
-  }
+  mainPin.removeEventListener('click', mainPinMouseUpHandler);
+
 }
 
 switchDisabledToForm(filterAd);
 switchDisabledToForm(formAd);
 
-mainPin.addEventListener('click', switchingMapHandler);
+mainPin.addEventListener('click', mainPinMouseUpHandler);
 
-fieldAddress.setAttribute('value', map.offsetWidth / 2 + ', ' + map.offsetHeight / 2);
+function setAddress(coords) {
+  fieldAddress.value = coords.x + ', ' + coords.y;
+}
 
-function getRelativeCoords(x, y) {
+function getCoordinates() {
   return {
-    xCoord: x - (document.documentElement.clientWidth - map.offsetWidth) / 2,
-    yCoord: y + window.pageYOffset
+    x: mainPin.offsetLeft + WIDTH_PIN / 2,
+    y: mainPin.offsetTop + HEIGHT_PIN
   };
 }
 
-function getCoordinatesHandler(event) {
-  var coords = getRelativeCoords(event.clientX, event.clientY);
+setAddress(getCoordinates());
 
-  fieldAddress.setAttribute('value', coords.xCoord + ', ' + coords.yCoord);
-  mainPin.style.left = coords.xCoord - WIDTH_PIN / 2 + 'px';
-  mainPin.style.top = coords.yCoord - HEIGHT_PIN + 'px';
-}
-
-mainPin.addEventListener('mouseup', getCoordinatesHandler);
-
-function paintCardOfElem(event) {
+function pinClickHandler(event) {
   var cardAd = document.querySelector('.map__card');
   var target = event.target;
-
-  while (target !== locationPin) {
-
-    if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-      if (cardAd) {
-        cardAd.remove();
-      }
-      outputCard(data[target.getAttribute('pin-id')]);
-      return;
+  var pin = target.closest('.map__pin:not(.map__pin--main)');
+  if (pin) {
+    if (cardAd) {
+      cardAd.remove();
     }
-    target = target.parentNode;
+    outputCard(data[pin.getAttribute('pin-id')]);
   }
 }
 
-locationPin.addEventListener('click', paintCardOfElem);
+locationPin.addEventListener('click', pinClickHandler);
