@@ -146,24 +146,28 @@ function fillPhoto(photos, photosContainer) {
 }
 
 function generateCard(cardData) {
-  var cloneCard = mapCard.cloneNode(true);
-  var featuresContainer = cloneCard.querySelector('.popup__features');
-  var photosContainer = cloneCard.querySelector('.popup__photos');
+  var clonedCard = mapCard.cloneNode(true);
+  var featuresContainer = clonedCard.querySelector('.popup__features');
+  var photosContainer = clonedCard.querySelector('.popup__photos');
 
-  cloneCard.querySelector('img').src = cardData.author.avatar;
-  cloneCard.querySelector('.popup__title').textContent = cardData.offer.title;
-  cloneCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
-  cloneCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
-  cloneCard.querySelector('.popup__type').textContent = RUS_TYPE[cardData.offer.type];
-  cloneCard
+  clonedCard.querySelector('img').src = cardData.author.avatar;
+  clonedCard.querySelector('.popup__title').textContent = cardData.offer.title;
+  clonedCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
+  clonedCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
+  clonedCard.querySelector('.popup__type').textContent = RUS_TYPE[cardData.offer.type];
+  clonedCard
     .querySelector('.popup__text--capacity')
     .textContent = cardData.offer.rooms + ' ' + getCaseForRoom(cardData.offer.rooms) + ' для ' + cardData.offer.guests + ' ' + getCaseForGuest(cardData.offer.guests);
-  cloneCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
+  clonedCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
   fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer);
-  cloneCard.querySelector('.popup__description').textContent = cardData.offer.description;
+  clonedCard.querySelector('.popup__description').textContent = cardData.offer.description;
   fillPhoto(cardData.offer.photos, photosContainer);
 
-  return cloneCard;
+  clonedCard.querySelector('.popup__close').addEventListener('click', function remove() {
+    clonedCard.remove();
+  });
+
+  return clonedCard;
 }
 
 var data = generateData();
@@ -179,11 +183,7 @@ function outputPins(info) {
 }
 
 function outputCard(adObject) {
-  var result = filtersContainer.before(generateCard(adObject));
-  document.querySelector('.popup__close').addEventListener('click', function remove() {
-    document.querySelector('.map__card').remove();
-  });
-  return result;
+  filtersContainer.before(generateCard(adObject));
 }
 
 // COMMENT fourth task
