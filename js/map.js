@@ -258,7 +258,6 @@ locationPin.addEventListener('click', pinClickHandler);
   var timeOut = document.querySelector('#timeout');
   var numberRoom = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
-  var adForm = document.querySelector('.ad-form');
 
   for (var i = 0; i < fields.length; i++) {
     fields[i].required = true;
