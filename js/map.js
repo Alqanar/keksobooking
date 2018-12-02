@@ -271,7 +271,7 @@ locationPin.addEventListener('click', pinClickHandler);
     }
   }
 
-  function changeMinPrice() {
+  function changePriceDependingOnHousing() {
     var params = {'min': '', 'placeholder': ''};
     params.min = minPrices[typeOfHousing.value];
     params.placeholder = 'от ' + params.min + ' до ' + price.max;
@@ -289,10 +289,6 @@ locationPin.addEventListener('click', pinClickHandler);
   function changeTimeHandler(event) {
     timeIn.value = event.target.value;
     timeOut.value = event.target.value;
-  }
-
-  function conditionCheck(check, text) {
-    capacity.setCustomValidity(check ? text : '');
   }
 
   function validateCapacity() {
@@ -318,7 +314,7 @@ locationPin.addEventListener('click', pinClickHandler);
         label += '100 комнат возможно выбрать только: "не для гостей"';
         break;
     }
-    conditionCheck(condition, label);
+    capacity.setCustomValidity(condition ? label : '');
   }
 
   function validatePriceHandler() {
@@ -329,15 +325,15 @@ locationPin.addEventListener('click', pinClickHandler);
     validateCapacity();
   }
 
-  function changeMinPriceHandler() {
-    changeMinPrice();
+  function changePriceDependingOnHousingHandler() {
+    changePriceDependingOnHousing();
   }
 
   validateCapacity();
   validatePrice();
-  changeMinPrice();
+  changePriceDependingOnHousing();
 
-  typeOfHousing.addEventListener('change', changeMinPriceHandler);
+  typeOfHousing.addEventListener('change', changePriceDependingOnHousingHandler);
   price.addEventListener('change', validatePriceHandler);
   timeIn.addEventListener('change', changeTimeHandler);
   timeOut.addEventListener('change', changeTimeHandler);
