@@ -251,175 +251,97 @@ locationPin.addEventListener('click', pinClickHandler);
 
 
 (function () {
-  var fields = document.querySelectorAll('.ad-form input:not([type="checkbox"]):not([type="file"])');
   var price = document.querySelector('#price');
   var typeOfHousing = document.querySelector('#type');
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
   var numberRoom = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
-
-  for (var i = 0; i < fields.length; i++) {
-    fields[i].required = true;
-  }
+  var minPrices = {
+    'bungalo': '0',
+    'flat': '1000',
+    'house': '5000',
+    'palace': '10000'};
 
   function setAttributes(el, attrs) {
-    for (var key in attrs) {
-      if (attrs.hasOwnProperty(key)) {
-        el.setAttribute(key, attrs[key]);
+    for (var attribute in attrs) {
+      if (attrs.hasOwnProperty(attribute)) {
+        el[attribute] = attrs[attribute];
       }
     }
   }
 
-  document.querySelector('.ad-form').setAttribute('action', 'https://js.dump.academy/keksobooking');
-  setAttributes(document.querySelector('#title'), {'minlength': '30', 'maxlength': '100'});
-  price.setAttribute('max', '1000000');
-  document.querySelector('#address').setAttribute('readonly', 'readonly');
-
-  function changeMinPriceHandler() {
-    switch (typeOfHousing.value) {
-      case 'bungalo':
-        setAttributes(price, {'min': '0', 'placeholder': 'от 0 до 1000000'});
-        break;
-      case 'flat':
-        setAttributes(price, {'min': '1000', 'placeholder': 'от 1000 до 1000000'});
-        break;
-      case 'house':
-        setAttributes(price, {'min': '5000', 'placeholder': 'от 5000 до 1000000'});
-        break;
-      case 'palace':
-        setAttributes(price, {'min': '10000', 'placeholder': 'от 10000 до 1000000'});
-        break;
-    }
-    validatePriceHandler();
+  function changeMinPrice() {
+    var params = {'min': '', 'placeholder': ''};
+    params.min = minPrices[typeOfHousing.value];
+    params.placeholder = 'от ' + params.min + ' до ' + price.max;
+    setAttributes(price, params);
+    validatePrice();
   }
 
-  function validatePriceHandler() {
-    switch (typeOfHousing.value) {
-      case 'bungalo':
-        if (price.value <= 0 || price.value >= 1000000) {
-          price.setCustomValidity('Введено неверное значение! Введите значение от 0 до 1 000 000');
-        } else {
-          price.setCustomValidity('');
-        }
-        break;
-      case 'flat':
-        if (price.value <= 1000 || price.value >= 1000000) {
-          price.setCustomValidity('Введено неверное значение! Введите значение от 1000 до 1 000 000');
-        } else {
-          price.setCustomValidity('');
-        }
-        break;
-      case 'house':
-        if (price.value <= 5000 || price.value >= 1000000) {
-          price.setCustomValidity('Введено неверное значение! Введите значение от 5000 до 1 000 000');
-        } else {
-          price.setCustomValidity('');
-        }
-        break;
-      case 'palace':
-        if (price.value <= 10000 || price.value >= 1000000) {
-          price.setCustomValidity('Введено неверное значение! Введите значение от 10000 до 1 000 000');
-        } else {
-          price.setCustomValidity('');
-        }
-        break;
-      default:
-        price.setCustomValidity('');
-    }
+  function validatePrice() {
+    price.setCustomValidity(
+        price.value < price.min || price.value > price.max
+          ? 'Введено неверное значение! Введите значение от ' + price.min + ' до ' + price.max
+          : '');
   }
 
   function changeTimeHandler(event) {
-    timeIn.selectedIndex = event.target.options.selectedIndex;
-    timeOut.selectedIndex = event.target.options.selectedIndex;
+    timeIn.value = event.target.value;
+    timeOut.value = event.target.value;
   }
 
-  function changeCapacityHandler() {
-    switch (numberRoom.value) {
-      case '1':
-        capacity.selectedIndex = 2;
-        for (var j = 0; j < capacity.options.length; j++) {
-          if (j !== 2) {
-            capacity.options[j].disabled = true;
-          }
-        }
+  function conditionCheck(check, text) {
+    capacity.setCustomValidity(check ? text : '');
+  }
+
+  function validateCapacity() {
+    var capacityInt = parseInt(capacity.value, 10);
+    var label = 'Введено неверное значение! Для ';
+    var condition;
+
+    switch (parseInt(numberRoom.value, 10)) {
+      case 1:
+        condition = capacityInt !== 1;
+        label += '1 комнаты возможное количество мест: "для 1 гостя"';
         break;
-      case '2':
-        for (var k = 0; k < capacity.options.length; k++) {
-          if (k !== 1 && k !== 2) {
-            capacity.options[k].disabled = true;
-          } else {
-            capacity.options[k].disabled = false;
-          }
-        }
+      case 2:
+        condition = capacityInt !== 1 && capacityInt !== 2;
+        label += '2 комнаты возможное количество мест: "для 1 гостя" или "для 2 гостей"';
         break;
-      case '3':
-        for (var l = 0; l < capacity.options.length; l++) {
-          if (l !== 3) {
-            capacity.options[l].disabled = false;
-          } else {
-            capacity.options[l].disabled = true;
-          }
-        }
+      case 3:
+        condition = capacityInt === 0;
+        label += '3 комнат невозможно выбрать: "не для гостей"';
         break;
-      case '100':
-        capacity.selectedIndex = 3;
-        for (var m = 0; m < capacity.options.length; m++) {
-          if (m === 3) {
-            capacity.options[m].disabled = false;
-          } else {
-            capacity.options[m].disabled = true;
-          }
-        }
+      case 100:
+        condition = capacityInt !== 0;
+        label += '100 комнат возможно выбрать только: "не для гостей"';
         break;
     }
-    validateCapacityHandler();
+    conditionCheck(condition, label);
+  }
+
+  function validatePriceHandler() {
+    validatePrice();
   }
 
   function validateCapacityHandler() {
-    switch (numberRoom.value) {
-      case '1':
-        if (capacity.selectedIndex !== 2) {
-          capacity.setCustomValidity('Введено неверное значение! Для 1 комнаты возможное количество мест: "для 1 гостя"');
-        } else {
-          capacity.setCustomValidity('');
-        }
-        break;
-      case '2':
-        if (capacity.selectedIndex !== 1 && capacity.selectedIndex !== 2) {
-          capacity.setCustomValidity('Введено неверное значение! Для 2 комнат возможное количество мест: "для 1 гостя" или "для 2 гостей"');
-        } else {
-          capacity.setCustomValidity('');
-        }
-        break;
-      case '3':
-        if (capacity.selectedIndex === 3) {
-          capacity.setCustomValidity('Введено неверное значение! Для 3 комнат невозможно выбрать: "не для гостей"');
-        } else {
-          capacity.setCustomValidity('');
-        }
-        break;
-      case '100':
-        if (capacity.selectedIndex !== 3) {
-          capacity.setCustomValidity('Введено неверное значение! Для 100 комнат возможно выбрать только: "не для гостей"');
-        } else {
-          capacity.setCustomValidity('');
-        }
-        break;
-      default:
-        capacity.setCustomValidity('');
-    }
+    validateCapacity();
   }
 
-  validateCapacityHandler();
-  validatePriceHandler();
+  function changeMinPriceHandler() {
+    changeMinPrice();
+  }
+
+  validateCapacity();
+  validatePrice();
+  changeMinPrice();
 
   typeOfHousing.addEventListener('change', changeMinPriceHandler);
   price.addEventListener('change', validatePriceHandler);
   timeIn.addEventListener('change', changeTimeHandler);
   timeOut.addEventListener('change', changeTimeHandler);
-  numberRoom.addEventListener('change', changeCapacityHandler);
+  numberRoom.addEventListener('change', validateCapacityHandler);
   capacity.addEventListener('change', validateCapacityHandler);
-
 })();
 
