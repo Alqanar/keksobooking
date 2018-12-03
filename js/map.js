@@ -215,7 +215,19 @@ function getCoordinates() {
   };
 }
 
-mainPin.addEventListener('mousedown', function mainPinMouseDownHandler(event) {
+function activatePage() {
+  setAddress(getCoordinates());
+
+  if (map.className !== 'map') {
+    map.classList.toggle('map--faded');
+    formAd.classList.toggle('ad-form--disabled');
+    switchDisabledToForm(filterAd);
+    switchDisabledToForm(formAd);
+    outputPins(data);
+  }
+}
+
+function mainPinMouseDownHandler(event) {
   var startCoords = {
     x: event.clientX,
     y: event.clientY
@@ -232,28 +244,22 @@ mainPin.addEventListener('mousedown', function mainPinMouseDownHandler(event) {
       y: moveEvt.clientY
     };
 
-    mainPin.style.left = (mainPin.offsetLeft - newCoords.x) + 'px';
-    mainPin.style.top = (mainPin.offsetTop - newCoords.y) + 'px';
+    mainPin.style.left = mainPin.offsetLeft - newCoords.x + 'px';
+    mainPin.style.top = mainPin.offsetTop - newCoords.y + 'px';
   }
 
   function mainPinMouseUpHandler() {
+    activatePage();
 
-    map.classList.toggle('map--faded');
-    formAd.classList.toggle('ad-form--disabled');
-    switchDisabledToForm(filterAd);
-    switchDisabledToForm(formAd);
-    outputPins(data);
-    outputCard(data[0]);
-    setAddress(getCoordinates());
-
-    mainPin.removeEventListener('mousedown', mainPinMouseDownHandler);
-    mainPin.removeEventListener('mousemove', mainPinMouseMoveHandler);
-    mainPin.removeEventListener('mouseup', mainPinMouseUpHandler);
+    document.removeEventListener('mousemove', mainPinMouseMoveHandler);
+    document.removeEventListener('mouseup', mainPinMouseUpHandler);
   }
 
-  mainPin.addEventListener('mousemove', mainPinMouseMoveHandler);
-  mainPin.addEventListener('mouseup', mainPinMouseUpHandler);
-});
+  document.addEventListener('mousemove', mainPinMouseMoveHandler);
+  document.addEventListener('mouseup', mainPinMouseUpHandler);
+}
+
+document.addEventListener('mousedown', mainPinMouseDownHandler);
 
 function pinClickHandler(event) {
   var cardAd = document.querySelector('.map__card');
