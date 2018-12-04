@@ -201,23 +201,8 @@ function switchDisabledToForm(element) {
   }
 }
 
-function mainPinMouseUpHandler() {
-
-  map.classList.toggle('map--faded');
-  formAd.classList.toggle('ad-form--disabled');
-  switchDisabledToForm(filterAd);
-  switchDisabledToForm(formAd);
-  outputPins(data);
-  outputCard(data[0]);
-
-  mainPin.removeEventListener('click', mainPinMouseUpHandler);
-
-}
-
 switchDisabledToForm(filterAd);
 switchDisabledToForm(formAd);
-
-mainPin.addEventListener('click', mainPinMouseUpHandler);
 
 function setAddress(coords) {
   fieldAddress.value = coords.x + ', ' + coords.y;
@@ -230,7 +215,51 @@ function getCoordinates() {
   };
 }
 
-setAddress(getCoordinates());
+function activatePage() {
+  setAddress(getCoordinates());
+
+  if (map.className !== 'map') {
+    map.classList.toggle('map--faded');
+    formAd.classList.toggle('ad-form--disabled');
+    switchDisabledToForm(filterAd);
+    switchDisabledToForm(formAd);
+    outputPins(data);
+  }
+}
+
+function mainPinMouseDownHandler(event) {
+  var startCoords = {
+    x: event.clientX,
+    y: event.clientY
+  };
+
+  function mainPinMouseMoveHandler(moveEvt) {
+    var newCoords = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mainPin.style.left = mainPin.offsetLeft - newCoords.x + 'px';
+    mainPin.style.top = mainPin.offsetTop - newCoords.y + 'px';
+  }
+
+  function mainPinMouseUpHandler() {
+    activatePage();
+
+    document.removeEventListener('mousemove', mainPinMouseMoveHandler);
+    document.removeEventListener('mouseup', mainPinMouseUpHandler);
+  }
+
+  document.addEventListener('mousemove', mainPinMouseMoveHandler);
+  document.addEventListener('mouseup', mainPinMouseUpHandler);
+}
+
+document.addEventListener('mousedown', mainPinMouseDownHandler);
 
 function pinClickHandler(event) {
   var cardAd = document.querySelector('.map__card');
@@ -340,4 +369,3 @@ locationPin.addEventListener('click', pinClickHandler);
   numberRoom.addEventListener('change', validateCapacityHandler);
   capacity.addEventListener('change', validateCapacityHandler);
 })();
-
