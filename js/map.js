@@ -78,10 +78,6 @@
     };
 
     function mainPinMouseMoveHandler(moveEvt) {
-      if (mouseMoveCallback) {
-        mouseMoveCallback();
-      }
-
       var newCoords = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
@@ -94,6 +90,10 @@
 
       mainPin.style.left = correctPinX(mainPin.offsetLeft - newCoords.x) + 'px';
       mainPin.style.top = correctPinY(mainPin.offsetTop - newCoords.y) + 'px';
+
+      if (mouseMoveCallback) {
+        mouseMoveCallback();
+      }
     }
 
     function mainPinMouseUpHandler() {
@@ -122,6 +122,6 @@
     }
   }
 
-  document.addEventListener('mousedown', mainPinMouseDownHandler);
+  mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
   locationPin.addEventListener('click', pinClickHandler);
 })();

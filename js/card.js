@@ -59,7 +59,7 @@
 
   function closePopup() {
     clonedCard.remove();
-    document.removeEventListener('keydown', popupEscPressHandler);
+    document.addEventListener('keydown', popupEscPressHandler);
   }
 
   window.generateCard = function (cardData) {
@@ -83,7 +83,6 @@
     document.addEventListener('keydown', popupEscPressHandler);
 
     popupClose.addEventListener('click', closePopup);
-    popupClose.addEventListener('keydown', popupEscPressHandler);
 
     return clonedCard;
   };
