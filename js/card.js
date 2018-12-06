@@ -53,13 +53,12 @@
     }
   }
 
-  function popupEscPressHandler(event) {
+  function documentEscPressHandler(event) {
     window.general.isEscEvent(event, closePopup);
   }
 
   function closePopup() {
     clonedCard.remove();
-    document.addEventListener('keydown', popupEscPressHandler);
   }
 
   window.generateCard = function (cardData) {
@@ -80,7 +79,7 @@
     fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer);
     clonedCard.querySelector('.popup__description').textContent = cardData.offer.description;
     fillPhoto(cardData.offer.photos, photosContainer);
-    document.addEventListener('keydown', popupEscPressHandler);
+    document.addEventListener('keydown', documentEscPressHandler);
 
     popupClose.addEventListener('click', closePopup);
 
