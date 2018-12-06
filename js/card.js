@@ -8,6 +8,7 @@
     'bungalo': 'Бунгало'
   };
   var mapCard = document.querySelector('#card').content.querySelector('.map__card');
+  var clonedCard;
 
   function getCaseForRoom(numRoom) {
     if (numRoom === 1) {
@@ -52,10 +53,20 @@
     }
   }
 
+  function popupEscPressHandler(event) {
+    window.general.isEscEvent(event, closePopup);
+  }
+
+  function closePopup() {
+    clonedCard.remove();
+    document.removeEventListener('keydown', popupEscPressHandler);
+  }
+
   window.generateCard = function (cardData) {
-    var clonedCard = mapCard.cloneNode(true);
+    clonedCard = mapCard.cloneNode(true);
     var featuresContainer = clonedCard.querySelector('.popup__features');
     var photosContainer = clonedCard.querySelector('.popup__photos');
+    var popupClose = clonedCard.querySelector('.popup__close');
 
     clonedCard.querySelector('img').src = cardData.author.avatar;
     clonedCard.querySelector('.popup__title').textContent = cardData.offer.title;
@@ -69,10 +80,10 @@
     fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer);
     clonedCard.querySelector('.popup__description').textContent = cardData.offer.description;
     fillPhoto(cardData.offer.photos, photosContainer);
+    document.addEventListener('keydown', popupEscPressHandler);
 
-    clonedCard.querySelector('.popup__close').addEventListener('click', function remove() {
-      clonedCard.remove();
-    });
+    popupClose.addEventListener('click', closePopup);
+    popupClose.addEventListener('keydown', popupEscPressHandler);
 
     return clonedCard;
   };

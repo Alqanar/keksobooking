@@ -16,7 +16,7 @@
     'house': '5000',
     'palace': '10000'};
 
-  window.switchDisabledField(formAd);
+  window.general.switchDisabledField(formAd);
 
   function setAttributes(el, attrs) {
     for (var attribute in attrs) {
@@ -103,7 +103,7 @@
 
     activate: function () {
       formAd.classList.toggle('ad-form--disabled');
-      window.switchDisabledField(formAd);
+      window.general.switchDisabledField(formAd);
     }
   };
 })();
