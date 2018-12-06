@@ -4,7 +4,7 @@
   var formAd = document.querySelector('.ad-form');
   var fieldAddress = document.querySelector('#address');
   var price = document.querySelector('#price');
-  var priceInt = parseInt(price.value, 10);
+  var priceInt = 0;
   var typeOfHousing = document.querySelector('#type');
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
@@ -16,25 +16,7 @@
     'house': '5000',
     'palace': '10000'};
 
-  window.form = {
-    switchDisabledField: function (element) {
-      var elems = element.querySelectorAll('.' + element.className.replace(' ', '.') + ' > *');
-
-      for (var i = 0; i < elems.length; i++) {
-        elems[i].disabled = !elems[i].disabled;
-      }
-    },
-
-    switchDisableClassForm: function () {
-      formAd.classList.toggle('ad-form--disabled');
-    },
-
-    setAddress: function (coords) {
-      fieldAddress.value = coords.x + ', ' + coords.y;
-    }
-  };
-
-  window.form.switchDisabledField(formAd);
+  window.switchDisabledField(formAd);
 
   function setAttributes(el, attrs) {
     for (var attribute in attrs) {
@@ -91,6 +73,7 @@
   }
 
   function validatePriceHandler() {
+    priceInt = parseInt(price.value, 10);
     validatePrice();
   }
 
@@ -112,4 +95,15 @@
   timeOut.addEventListener('change', changeTimeHandler);
   numberRoom.addEventListener('change', validateCapacityHandler);
   capacity.addEventListener('change', validateCapacityHandler);
+
+  window.form = {
+    setAddress: function (coords) {
+      fieldAddress.value = coords.x + ', ' + coords.y;
+    },
+
+    activate: function () {
+      formAd.classList.toggle('ad-form--disabled');
+      window.switchDisabledField(formAd);
+    }
+  };
 })();

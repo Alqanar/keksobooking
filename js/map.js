@@ -4,6 +4,9 @@
   var map = document.querySelector('.map');
   var locationPin = document.querySelector('.map__pins');
   var filtersContainer = document.querySelector('.map__filters-container');
+  var filterAd = document.querySelector('.map__filters');
+  var mainPin = document.querySelector('.map__pin--main');
+  var activateCallback;
 
   // COMMENT output pin && card
 
@@ -23,29 +26,26 @@
 
   // COMMENT inicialisation
 
-  var filterAd = document.querySelector('.map__filters');
-  var mainPin = document.querySelector('.map__pin--main');
+  window.switchDisabledField(filterAd);
 
-  window.form.switchDisabledField(filterAd);
+  window.map = {
+    getCoordinates: function () {
+      return {
+        x: mainPin.offsetLeft + window.pin.WIDTH_PIN / 2,
+        y: mainPin.offsetTop + window.pin.HEIGHT_PIN
+      };
+    },
 
-  function getCoordinates() {
-    return {
-      x: mainPin.offsetLeft + window.pin.WIDTH_PIN / 2,
-      y: mainPin.offsetTop + window.pin.HEIGHT_PIN
-    };
-  }
-
-  function activatePage() {
-    window.form.setAddress(getCoordinates());
-
-    if (map.className !== 'map') {
+    activate: function () {
       map.classList.toggle('map--faded');
-      window.form.switchDisableClassForm();
-      window.form.switchDisabledField(filterAd);
-      window.form.switchDisabledField(document.querySelector('.ad-form'));
+      window.switchDisabledField(filterAd);
       outputPins(window.data);
+    },
+
+    setActivateCallback: function (callback) {
+      activateCallback = callback;
     }
-  }
+  };
 
   // COMMENT drug-and-drop
 
@@ -71,7 +71,10 @@
     }
 
     function mainPinMouseUpHandler() {
-      activatePage();
+      if (activateCallback) {
+        activateCallback();
+        activateCallback = null;
+      }
 
       document.removeEventListener('mousemove', mainPinMouseMoveHandler);
       document.removeEventListener('mouseup', mainPinMouseUpHandler);
@@ -80,8 +83,6 @@
     document.addEventListener('mousemove', mainPinMouseMoveHandler);
     document.addEventListener('mouseup', mainPinMouseUpHandler);
   }
-
-  document.addEventListener('mousedown', mainPinMouseDownHandler);
 
   function pinClickHandler(event) {
     var cardAd = document.querySelector('.map__card');
@@ -95,5 +96,6 @@
     }
   }
 
+  document.addEventListener('mousedown', mainPinMouseDownHandler);
   locationPin.addEventListener('click', pinClickHandler);
 })();
