@@ -2,6 +2,7 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var templateError = document.querySelector('#error').content.querySelector('.error');
 
   window.general = {
     switchDisabledField: function (element) {
@@ -16,6 +17,14 @@
       if (event.keyCode === ESC_KEYCODE) {
         action();
       }
+    },
+
+    displayError: function (error) {
+      var cloneErrorMessage = templateError.cloneNode(true);
+
+      cloneErrorMessage.querySelector('.error__message').textContent = error;
+
+      document.querySelector('main').appendChild(cloneErrorMessage);
     }
   };
 })();

@@ -96,6 +96,17 @@
   numberRoom.addEventListener('change', validateCapacityHandler);
   capacity.addEventListener('change', validateCapacityHandler);
 
+  formAd.addEventListener('submit', function (event) {
+    event.preventDefault();
+    window.backend.sendData(
+        new FormData(formAd),
+        function () {
+          formAd.reset();
+        },
+        window.general.displayError
+    );
+  });
+
   window.form = {
     setAddress: function (coords) {
       fieldAddress.value = coords.x + ', ' + coords.y;
