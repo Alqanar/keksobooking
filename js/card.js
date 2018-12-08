@@ -34,22 +34,30 @@
     return fragmentElems;
   }
 
-  function fillFeatures(features, featuresContainer) {
+  function fillFeatures(features, featuresContainer, length) {
     featuresContainer.innerHTML = '';
 
-    featuresContainer.appendChild(features);
+    if (length) {
+      featuresContainer.appendChild(features);
+    } else {
+      featuresContainer.classList.add('visually-hidden');
+    }
   }
 
   function fillPhoto(photos, photosContainer) {
     var elemPhoto = photosContainer.querySelector('img');
 
-    elemPhoto.src = photos[0];
+    if (photos.length) {
+      elemPhoto.src = photos[0];
 
-    for (var i = 1; i < photos.length; i++) {
-      var anotherPhoto = elemPhoto.cloneNode();
+      for (var i = 1; i < photos.length; i++) {
+        var anotherPhoto = elemPhoto.cloneNode();
 
-      anotherPhoto.src = photos[i];
-      photosContainer.appendChild(anotherPhoto);
+        anotherPhoto.src = photos[i];
+        photosContainer.appendChild(anotherPhoto);
+      }
+    } else {
+      photosContainer.classList.add('visually-hidden');
     }
   }
 
@@ -76,7 +84,7 @@
       .querySelector('.popup__text--capacity')
       .textContent = cardData.offer.rooms + ' ' + getCaseForRoom(cardData.offer.rooms) + ' для ' + cardData.offer.guests + ' ' + getCaseForGuest(cardData.offer.guests);
     clonedCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
-    fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer);
+    fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer, cardData.offer.features.length);
     clonedCard.querySelector('.popup__description').textContent = cardData.offer.description;
     fillPhoto(cardData.offer.photos, photosContainer);
     document.addEventListener('keydown', documentEscPressHandler);

@@ -31,7 +31,9 @@
       var pinFragment = document.createDocumentFragment();
 
       for (var i = 0; i < info.length; i++) {
-        pinFragment.appendChild(window.pin.generatePin(info[i]));
+        if (info[i].offer) {
+          pinFragment.appendChild(window.pin.generatePin(info[i]));
+        }
       }
 
       return locationPin.appendChild(pinFragment);
