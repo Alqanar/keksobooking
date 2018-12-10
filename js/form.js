@@ -4,7 +4,7 @@
   var formAd = document.querySelector('.ad-form');
   var fieldAddress = document.querySelector('#address');
   var price = document.querySelector('#price');
-  var priceInt = 0;
+  var priceInt;
   var typeOfHousing = document.querySelector('#type');
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
@@ -15,6 +15,8 @@
     'flat': '1000',
     'house': '5000',
     'palace': '10000'};
+  var checkFormButtonsCallback = null;
+  var drop = document.querySelector('.ad-form__reset');
 
   window.general.switchDisabledField(formAd);
 
@@ -85,9 +87,13 @@
     changePriceDependingOnHousing();
   }
 
-  validateCapacity();
-  validatePrice();
-  changePriceDependingOnHousing();
+  function resetPage() {
+    formAd.reset();
+    window.form.changeStatus();
+    if (checkFormButtonsCallback) {
+      checkFormButtonsCallback();
+    }
+  }
 
   typeOfHousing.addEventListener('change', changePriceDependingOnHousingHandler);
   price.addEventListener('change', validatePriceHandler);
@@ -101,20 +107,33 @@
     window.backend.sendData(
         new FormData(formAd),
         function () {
-          formAd.reset();
+          window.displayMessage();
+          resetPage();
         },
-        window.general.displayError
+        function (error) {
+          window.displayMessage(error, true);
+        }
     );
   });
+
+  drop.addEventListener('click', resetPage);
 
   window.form = {
     setAddress: function (coords) {
       fieldAddress.value = coords.x + ', ' + coords.y;
     },
 
-    activate: function () {
+    changeStatus: function () {
       formAd.classList.toggle('ad-form--disabled');
       window.general.switchDisabledField(formAd);
+      priceInt = 0;
+      validateCapacity();
+      validatePrice();
+      changePriceDependingOnHousing();
+    },
+
+    setFormButtonsCallback: function (callback) {
+      checkFormButtonsCallback = callback;
     }
   };
 })();

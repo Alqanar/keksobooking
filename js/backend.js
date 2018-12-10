@@ -31,44 +31,44 @@
     }
   }
 
+  function performRequest(params) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.responseType = 'json';
+    xhr.timeout = 1000;
+
+    xhr.open(params.type, params.url);
+    xhr.send(params.facts ? params.facts : undefined);
+
+    xhr.addEventListener('load', function () {
+      processingServerResponse(xhr, params.lade, params.mistake);
+    });
+    xhr.addEventListener('error', function () {
+      params.mistake('Произошла ошибка соединения');
+    });
+    xhr.addEventListener('timeout', function () {
+      params.mistake('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
+  }
+
   window.backend = {
     getData: function (loadCallback, errorCalback) {
-      var xhr = new XMLHttpRequest();
-
-      xhr.responseType = 'json';
-      xhr.timeout = 1000;
-
-      xhr.open('GET', 'https://js.dump.academy/keksobooking/data');
-      xhr.send();
-
-      xhr.addEventListener('load', function () {
-        processingServerResponse(xhr, loadCallback, errorCalback);
-      });
-      xhr.addEventListener('error', function () {
-        errorCalback('Произошла ошибка соединения');
-      });
-      xhr.addEventListener('timeout', function () {
-        errorCalback('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-      });
+      performRequest({
+        lade: loadCallback,
+        mistake: errorCalback,
+        type: 'GET',
+        url: 'https://js.dump.academy/keksobooking/data'}
+      );
     },
 
     sendData: function (data, loadCallback, errorCalback) {
-      var xhr = new XMLHttpRequest();
-
-      xhr.timeout = 1000;
-
-      xhr.open('POST', 'https://js.dump.academy/keksobooking');
-      xhr.send(data);
-
-      xhr.addEventListener('load', function () {
-        processingServerResponse(xhr, loadCallback, errorCalback);
-      });
-      xhr.addEventListener('error', function () {
-        errorCalback('Произошла ошибка соединения');
-      });
-      xhr.addEventListener('timeout', function () {
-        errorCalback('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-      });
+      performRequest({
+        facts: data,
+        lade: loadCallback,
+        mistake: errorCalback,
+        type: 'POST',
+        url: 'https://js.dump.academy/keksobooking'}
+      );
     }
   };
 })();
