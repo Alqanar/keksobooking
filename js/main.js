@@ -20,16 +20,33 @@
     );
   }
 
+  function deactivatePage() {
+    window.form.changeStatus();
+    window.form.resetForm();
+    window.map.activate();
+    window.map.clear();
+    window.map.setMouseUpCallback(activatePage);
+    recordCoordinates();
+  }
+
+  function sendDataForm() {
+    window.backend.sendData(
+        window.form.getFormData(),
+        function () {
+          window.displayMessage();
+          deactivatePage();
+        },
+        function (error) {
+          window.displayMessage(error, true);
+        }
+    );
+  }
+
   recordCoordinates();
   window.map.setMouseUpCallback(activatePage);
   window.map.setMouseMoveCallback(recordCoordinates);
 
-  window.form.setFormButtonsCallback(function () {
-    window.map.activate();
-    window.map.deactivatePage();
-    window.map.setMouseUpCallback(activatePage);
-    recordCoordinates();
-  });
+  window.form.setResetBtnClickCallback(deactivatePage);
+  window.form.setSubmitBtnClickCallback(sendDataForm);
 
-  window.card.setCloseCardCallback(window.map.deleteClassPin);
 })();

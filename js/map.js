@@ -87,7 +87,7 @@
     var pin = target.closest('.map__pin:not(.map__pin--main)');
     if (pin) {
       pin.classList.add(activeClassPin);
-      window.map.deleteClassPin();
+      deleteClassPin();
       lastClickedPin = pin;
       removeCard();
       outputCard(window.data[pin.getAttribute('pin-id')]);
@@ -101,10 +101,18 @@
     }
   }
 
+  function deleteClassPin() {
+    if (lastClickedPin) {
+      lastClickedPin.classList.remove(activeClassPin);
+    }
+  }
+
   window.general.switchDisabledField(filterAd);
+  window.card.setCloseCardCallback(deleteClassPin);
 
   mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
   locationPin.addEventListener('click', pinClickHandler);
+
 
   window.map = {
     getCoordinates: function () {
@@ -139,17 +147,11 @@
       mouseUpCallback = callback;
     },
 
-    deactivatePage: function () {
+    clear: function () {
       removePins();
       removeCard();
       mainPin.style.left = MAIN_PIN_VALUE_LEFT + 'px';
       mainPin.style.top = MAIN_PIN_VALUE_TOP + 'px';
-    },
-
-    deleteClassPin: function () {
-      if (lastClickedPin) {
-        lastClickedPin.classList.remove(activeClassPin);
-      }
     }
   };
 })();
