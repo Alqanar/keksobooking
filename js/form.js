@@ -4,7 +4,7 @@
   var formAd = document.querySelector('.ad-form');
   var fieldAddress = document.querySelector('#address');
   var price = document.querySelector('#price');
-  var priceInt = 0;
+  var priceInt;
   var typeOfHousing = document.querySelector('#type');
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
@@ -15,6 +15,9 @@
     'flat': '1000',
     'house': '5000',
     'palace': '10000'};
+  var submitBtnClickCallback = null;
+  var resetBtnClickCallback = null;
+  var drop = document.querySelector('.ad-form__reset');
 
   window.general.switchDisabledField(formAd);
 
@@ -85,9 +88,9 @@
     changePriceDependingOnHousing();
   }
 
-  validateCapacity();
-  validatePrice();
-  changePriceDependingOnHousing();
+  function resetForm() {
+    resetBtnClickCallback();
+  }
 
   typeOfHousing.addEventListener('change', changePriceDependingOnHousingHandler);
   price.addEventListener('change', validatePriceHandler);
@@ -96,14 +99,41 @@
   numberRoom.addEventListener('change', validateCapacityHandler);
   capacity.addEventListener('change', validateCapacityHandler);
 
+  formAd.addEventListener('submit', function (event) {
+    event.preventDefault();
+    submitBtnClickCallback();
+  });
+
+  drop.addEventListener('click', resetForm);
+
   window.form = {
     setAddress: function (coords) {
       fieldAddress.value = coords.x + ', ' + coords.y;
     },
 
-    activate: function () {
+    changeStatus: function () {
       formAd.classList.toggle('ad-form--disabled');
       window.general.switchDisabledField(formAd);
+      priceInt = 0;
+      validateCapacity();
+      validatePrice();
+      changePriceDependingOnHousing();
+    },
+
+    resetForm: function () {
+      formAd.reset();
+    },
+
+    setSubmitBtnClickCallback: function (callback) {
+      submitBtnClickCallback = callback;
+    },
+
+    setResetBtnClickCallback: function (callback) {
+      resetBtnClickCallback = callback;
+    },
+
+    getFormData: function () {
+      return new FormData(formAd);
     }
   };
 })();

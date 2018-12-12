@@ -34,22 +34,30 @@
     return fragmentElems;
   }
 
-  function fillFeatures(features, featuresContainer) {
+  function fillFeatures(features, featuresContainer, length) {
     featuresContainer.innerHTML = '';
 
-    featuresContainer.appendChild(features);
+    if (length) {
+      featuresContainer.appendChild(features);
+    } else {
+      featuresContainer.classList.add('visually-hidden');
+    }
   }
 
   function fillPhoto(photos, photosContainer) {
     var elemPhoto = photosContainer.querySelector('img');
 
-    elemPhoto.src = photos[0];
+    if (photos.length) {
+      elemPhoto.src = photos[0];
 
-    for (var i = 1; i < photos.length; i++) {
-      var anotherPhoto = elemPhoto.cloneNode();
+      for (var i = 1; i < photos.length; i++) {
+        var anotherPhoto = elemPhoto.cloneNode();
 
-      anotherPhoto.src = photos[i];
-      photosContainer.appendChild(anotherPhoto);
+        anotherPhoto.src = photos[i];
+        photosContainer.appendChild(anotherPhoto);
+      }
+    } else {
+      photosContainer.classList.add('visually-hidden');
     }
   }
 
@@ -57,32 +65,43 @@
     window.general.isEscEvent(event, closePopup);
   }
 
+  var closeCardCallback = null;
+
   function closePopup() {
     clonedCard.remove();
+    if (closeCardCallback) {
+      closeCardCallback();
+    }
   }
 
-  window.generateCard = function (cardData) {
-    clonedCard = mapCard.cloneNode(true);
-    var featuresContainer = clonedCard.querySelector('.popup__features');
-    var photosContainer = clonedCard.querySelector('.popup__photos');
-    var popupClose = clonedCard.querySelector('.popup__close');
+  window.card = {
+    generateCard: function (cardData) {
+      clonedCard = mapCard.cloneNode(true);
+      var featuresContainer = clonedCard.querySelector('.popup__features');
+      var photosContainer = clonedCard.querySelector('.popup__photos');
+      var popupClose = clonedCard.querySelector('.popup__close');
 
-    clonedCard.querySelector('img').src = cardData.author.avatar;
-    clonedCard.querySelector('.popup__title').textContent = cardData.offer.title;
-    clonedCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
-    clonedCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
-    clonedCard.querySelector('.popup__type').textContent = RUS_TYPE[cardData.offer.type];
-    clonedCard
-      .querySelector('.popup__text--capacity')
-      .textContent = cardData.offer.rooms + ' ' + getCaseForRoom(cardData.offer.rooms) + ' для ' + cardData.offer.guests + ' ' + getCaseForGuest(cardData.offer.guests);
-    clonedCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
-    fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer);
-    clonedCard.querySelector('.popup__description').textContent = cardData.offer.description;
-    fillPhoto(cardData.offer.photos, photosContainer);
-    document.addEventListener('keydown', documentEscPressHandler);
+      clonedCard.querySelector('img').src = cardData.author.avatar;
+      clonedCard.querySelector('.popup__title').textContent = cardData.offer.title;
+      clonedCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
+      clonedCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
+      clonedCard.querySelector('.popup__type').textContent = RUS_TYPE[cardData.offer.type];
+      clonedCard
+        .querySelector('.popup__text--capacity')
+        .textContent = cardData.offer.rooms + ' ' + getCaseForRoom(cardData.offer.rooms) + ' для ' + cardData.offer.guests + ' ' + getCaseForGuest(cardData.offer.guests);
+      clonedCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
+      fillFeatures(getNewElemFeatures(cardData.offer.features), featuresContainer, cardData.offer.features.length);
+      clonedCard.querySelector('.popup__description').textContent = cardData.offer.description;
+      fillPhoto(cardData.offer.photos, photosContainer);
+      document.addEventListener('keydown', documentEscPressHandler);
 
-    popupClose.addEventListener('click', closePopup);
+      popupClose.addEventListener('click', closePopup);
 
-    return clonedCard;
+      return clonedCard;
+    },
+
+    setCloseCardCallback: function (callback) {
+      closeCardCallback = callback;
+    }
   };
 })();

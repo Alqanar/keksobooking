@@ -16,6 +16,12 @@
       if (event.keyCode === ESC_KEYCODE) {
         action();
       }
+    },
+
+    specifyId: function (info) {
+      for (var i = 0; i < info.length; i++) {
+        info[i].id = i;
+      }
     }
   };
 })();
