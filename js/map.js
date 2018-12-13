@@ -107,12 +107,21 @@
     }
   }
 
+  function clearMapComponents() {
+    removePins();
+    removeCard();
+  }
+
   window.general.switchDisabledField(filterAd);
   window.card.setCloseCardCallback(deleteClassPin);
 
   mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
   locationPin.addEventListener('click', pinClickHandler);
 
+  window.setChangeFilterCallback(function (elems) {
+    clearMapComponents();
+    window.map.outputPins(elems);
+  });
 
   window.map = {
     getCoordinates: function () {
@@ -134,7 +143,7 @@
       return locationPin.appendChild(pinFragment);
     },
 
-    activate: function () {
+    changeState: function () {
       map.classList.toggle('map--faded');
       window.general.switchDisabledField(filterAd);
     },
@@ -148,8 +157,7 @@
     },
 
     clear: function () {
-      removePins();
-      removeCard();
+      clearMapComponents();
       mainPin.style.left = MAIN_PIN_VALUE_LEFT + 'px';
       mainPin.style.top = MAIN_PIN_VALUE_TOP + 'px';
     }
