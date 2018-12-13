@@ -15,7 +15,7 @@
     };
   }
 
-  function filterData() {
+  function filterDataHandler() {
     var selectsData = selects.reduce(function (obj, elem) {
       obj[elem.name] = elem.value;
       return obj;
@@ -52,7 +52,9 @@
     changeFilterCallback(filteredData);
   }
 
-  form.addEventListener('change', filterData);
+  var debouncedFilerDataHandler = window.general.debounce(filterDataHandler);
+
+  form.addEventListener('change', debouncedFilerDataHandler);
 
   window.setChangeFilterCallback = function (callback) {
     changeFilterCallback = callback;
