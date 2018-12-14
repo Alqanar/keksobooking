@@ -11,8 +11,8 @@
           window.data = data;
           window.general.specifyId(data);
           window.form.changeStatus();
-          window.map.activate();
-          window.map.outputPins(window.data);
+          window.map.changeState();
+          window.map.outputPins(window.data.slice(0, 5));
         },
         function (error) {
           window.displayMessage(error, true);
@@ -23,7 +23,7 @@
   function deactivatePage() {
     window.form.changeStatus();
     window.form.resetForm();
-    window.map.activate();
+    window.map.changeState();
     window.map.clear();
     window.map.setMouseUpCallback(activatePage);
     recordCoordinates();
