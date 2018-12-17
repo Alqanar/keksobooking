@@ -11,10 +11,10 @@
   var numberRoom = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
   var minPrices = {
-    'bungalo': '0',
-    'flat': '1000',
-    'house': '5000',
-    'palace': '10000'};
+    bungalo: '0',
+    flat: '1000',
+    house: '5000',
+    palace: '10000'};
   var submitBtnClickCallback = null;
   var resetBtnClickCallback = null;
   var drop = document.querySelector('.ad-form__reset');

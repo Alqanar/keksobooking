@@ -2,10 +2,10 @@
 
 (function () {
   var RUS_TYPE = {
-    'palace': 'Дворец',
-    'flat': 'Квартира',
-    'house': 'Дом',
-    'bungalo': 'Бунгало'
+    palace: 'Дворец',
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало'
   };
   var mapCard = document.querySelector('#card').content.querySelector('.map__card');
   var clonedCard;
