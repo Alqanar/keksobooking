@@ -3,22 +3,29 @@
 (function () {
   function processingServerResponse(xhr, loadCallback, errorCalback) {
     var error;
+    var Code = {
+      SUCCESS: 200,
+      WRONG_REQUEST: 400,
+      USER_NOT_AUTHORIZED: 401,
+      NOT_FOUND_ERROR: 404,
+      SERVER_ERROR: 500
+    };
 
     switch (xhr.status) {
-      case 200:
+      case Code.SUCCESS:
         loadCallback(xhr.response);
         break;
 
-      case 400:
+      case Code.WRONG_REQUEST:
         error = 'Неверный запрос';
         break;
-      case 401:
+      case Code.USER_NOT_AUTHORIZED:
         error = 'Пользователь не авторизован';
         break;
-      case 404:
+      case Code.NOT_FOUND_ERROR:
         error = 'Запрашиваемый ресурс не найден';
         break;
-      case 500:
+      case Code.SERVER_ERROR:
         error = 'Внутренняя ошибка сервера';
         break;
 
@@ -41,13 +48,13 @@
     xhr.send(params.facts ? params.facts : undefined);
 
     xhr.addEventListener('load', function () {
-      processingServerResponse(xhr, params.lade, params.mistake);
+      processingServerResponse(xhr, params.lade, params.displayMistake);
     });
     xhr.addEventListener('error', function () {
-      params.mistake('Произошла ошибка соединения');
+      params.displayMistake('Произошла ошибка соединения');
     });
     xhr.addEventListener('timeout', function () {
-      params.mistake('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      params.displayMistake('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
   }
 
@@ -55,7 +62,7 @@
     getData: function (loadCallback, errorCalback) {
       performRequest({
         lade: loadCallback,
-        mistake: errorCalback,
+        displayMistake: errorCalback,
         type: 'GET',
         url: 'https://js.dump.academy/keksobooking/data'}
       );
@@ -65,7 +72,7 @@
       performRequest({
         facts: data,
         lade: loadCallback,
-        mistake: errorCalback,
+        displayMistake: errorCalback,
         type: 'POST',
         url: 'https://js.dump.academy/keksobooking'}
       );

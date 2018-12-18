@@ -13,7 +13,7 @@
   function getCaseForRoom(numRoom) {
     if (numRoom === 1) {
       return 'комната';
-    } else if (numRoom === 5) {
+    } else if (numRoom === 0 || numRoom >= 5) {
       return 'комнат';
     }
     return 'комнаты';

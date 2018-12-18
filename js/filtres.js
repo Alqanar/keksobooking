@@ -5,6 +5,10 @@
   var form = document.querySelector('.map__filters');
   var selects = Array.from(document.querySelectorAll('.map__filter'));
   var features = Array.from(document.querySelectorAll('.map__checkbox'));
+  var AveragePrice = {
+    MIN: 10000,
+    MAX: 50000
+  };
   var changeFilterCallback = null;
 
   function getFilteredData() {
@@ -24,13 +28,13 @@
       var priceCheck = true;
       switch (selectsData['housing-price']) {
         case 'middle':
-          priceCheck = ad.offer.price >= 10000 && ad.offer.price <= 50000;
+          priceCheck = ad.offer.price >= AveragePrice.MIN && ad.offer.price <= AveragePrice.MAX;
           break;
         case 'low':
-          priceCheck = ad.offer.price < 10000;
+          priceCheck = ad.offer.price < AveragePrice.MIN;
           break;
         case 'high':
-          priceCheck = ad.offer.price > 50000;
+          priceCheck = ad.offer.price > AveragePrice.MAX;
           break;
       }
 
