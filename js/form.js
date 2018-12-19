@@ -1,6 +1,11 @@
 'use strict';
 
 (function () {
+  var minPrices = {
+    bungalo: '0',
+    flat: '1000',
+    house: '5000',
+    palace: '10000'};
   var formAd = document.querySelector('.ad-form');
   var fieldAddress = document.querySelector('#address');
   var price = document.querySelector('#price');
@@ -10,11 +15,6 @@
   var timeOut = document.querySelector('#timeout');
   var numberRoom = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
-  var minPrices = {
-    bungalo: '0',
-    flat: '1000',
-    house: '5000',
-    palace: '10000'};
   var submitBtnClickCallback = null;
   var resetBtnClickCallback = null;
   var resetBtn = document.querySelector('.ad-form__reset');

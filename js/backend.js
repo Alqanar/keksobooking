@@ -1,15 +1,18 @@
 'use strict';
 
 (function () {
-  function processingServerResponse(xhr, loadCallback, errorCalback) {
+  var DATA_SOURSE_URL = 'https://js.dump.academy/keksobooking/data';
+  var DATA_SENDING_URL = 'https://js.dump.academy/keksobooking';
+  var Code = {
+    SUCCESS: 200,
+    WRONG_REQUEST: 400,
+    USER_NOT_AUTHORIZED: 401,
+    NOT_FOUND_ERROR: 404,
+    SERVER_ERROR: 500
+  };
+
+  function processingServerResponse(xhr, loadCallback, errorCallback) {
     var error;
-    var Code = {
-      SUCCESS: 200,
-      WRONG_REQUEST: 400,
-      USER_NOT_AUTHORIZED: 401,
-      NOT_FOUND_ERROR: 404,
-      SERVER_ERROR: 500
-    };
 
     switch (xhr.status) {
       case Code.SUCCESS:
@@ -34,7 +37,7 @@
     }
 
     if (error) {
-      errorCalback(error);
+      errorCallback(error);
     }
   }
 
@@ -59,22 +62,22 @@
   }
 
   window.backend = {
-    getData: function (loadCallback, errorCalback) {
+    getData: function (loadCallback, errorCallback) {
       performRequest({
         lade: loadCallback,
-        displayMistake: errorCalback,
+        displayMistake: errorCallback,
         type: 'GET',
-        url: 'https://js.dump.academy/keksobooking/data'}
+        url: DATA_SOURSE_URL}
       );
     },
 
-    sendData: function (data, loadCallback, errorCalback) {
+    sendData: function (data, loadCallback, errorCallback) {
       performRequest({
         facts: data,
         lade: loadCallback,
-        displayMistake: errorCalback,
+        displayMistake: errorCallback,
         type: 'POST',
-        url: 'https://js.dump.academy/keksobooking'}
+        url: DATA_SENDING_URL}
       );
     }
   };

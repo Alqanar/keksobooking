@@ -62,12 +62,12 @@
   }
 
   function documentEscPressHandler(event) {
-    window.general.isEscEvent(event, closePopup);
+    window.general.isEscEvent(event, closePopupHandler);
   }
 
   var closeCardCallback = null;
 
-  function closePopup() {
+  function closePopupHandler() {
     clonedCard.remove();
     if (closeCardCallback) {
       closeCardCallback();
@@ -95,7 +95,7 @@
       fillPhoto(cardData.offer.photos, photosContainer);
       document.addEventListener('keydown', documentEscPressHandler);
 
-      popupClose.addEventListener('click', closePopup);
+      popupClose.addEventListener('click', closePopupHandler);
 
       return clonedCard;
     },

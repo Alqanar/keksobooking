@@ -2,13 +2,13 @@
 
 (function () {
   var ANY_VALUE = 'any';
-  var form = document.querySelector('.map__filters');
-  var selects = Array.from(document.querySelectorAll('.map__filter'));
-  var features = Array.from(document.querySelectorAll('.map__checkbox'));
   var AveragePrice = {
     MIN: 10000,
     MAX: 50000
   };
+  var form = document.querySelector('.map__filters');
+  var selects = Array.from(document.querySelectorAll('.map__filter'));
+  var features = Array.from(document.querySelectorAll('.map__checkbox'));
   var changeFilterCallback = null;
 
   function getFilteredData() {
