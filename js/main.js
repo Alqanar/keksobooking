@@ -22,7 +22,7 @@
 
   function deactivatePage() {
     window.form.changeStatus();
-    window.form.resetForm();
+    window.form.reset();
     window.preview.clearAvatar();
     window.preview.clearPreviewAd();
     window.map.changeState();
@@ -33,7 +33,7 @@
 
   function sendDataForm() {
     window.backend.sendData(
-        window.form.getFormData(),
+        window.form.getData(),
         function () {
           window.displayMessage();
           deactivatePage();

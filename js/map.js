@@ -21,7 +21,7 @@
 
 
   function outputCard(adObject) {
-    filtersContainer.before(window.card.generateCard(adObject));
+    filtersContainer.before(window.card.generate(adObject));
   }
 
   function correctPinX(x) {
@@ -119,7 +119,7 @@
   }
 
   window.general.switchDisabledField(filterAd);
-  window.card.setCloseCardCallback(deleteClassPin);
+  window.card.setCloseCallback(deleteClassPin);
 
   mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
   locationPin.addEventListener('click', pinClickHandler);

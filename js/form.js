@@ -88,7 +88,7 @@
     changePriceDependingOnHousing();
   }
 
-  function resetForm() {
+  function resetFormHandler() {
     resetBtnClickCallback();
   }
 
@@ -104,7 +104,7 @@
     submitBtnClickCallback();
   });
 
-  resetBtn.addEventListener('click', resetForm);
+  resetBtn.addEventListener('click', resetFormHandler);
 
   window.form = {
     setAddress: function (coords) {
@@ -120,7 +120,7 @@
       changePriceDependingOnHousing();
     },
 
-    resetForm: function () {
+    reset: function () {
       formAd.reset();
     },
 
@@ -132,7 +132,7 @@
       resetBtnClickCallback = callback;
     },
 
-    getFormData: function () {
+    getData: function () {
       return new FormData(formAd);
     }
   };

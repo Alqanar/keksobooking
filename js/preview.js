@@ -75,7 +75,7 @@
     clearAvatar: function () {
       avatarPhoto.src = MUFFIN_URL;
     },
-    clearPreviewAd: function () {
+    clearPhotosHouseAd: function () {
       var photosHouse = document.querySelectorAll('.ad-form__photo');
       var firstImage = containerPhoto.querySelector('img');
 

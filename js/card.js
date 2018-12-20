@@ -75,7 +75,7 @@
   }
 
   window.card = {
-    generateCard: function (cardData) {
+    generate: function (cardData) {
       clonedCard = mapCard.cloneNode(true);
       var featuresContainer = clonedCard.querySelector('.popup__features');
       var photosContainer = clonedCard.querySelector('.popup__photos');
@@ -100,7 +100,7 @@
       return clonedCard;
     },
 
-    setCloseCardCallback: function (callback) {
+    setCloseCallback: function (callback) {
       closeCardCallback = callback;
     }
   };
