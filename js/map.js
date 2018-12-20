@@ -1,6 +1,12 @@
 'use strict';
 
 (function () {
+  var WIDTH_MAIN_PIN = 62;
+  var HEIGHT_MAIN_PIN = 82;
+  var WINDOW_START_X = 0;
+  var WINDOW_END_X = 1200;
+  var WINDOW_START_Y = 130;
+  var WINDOW_END_Y = 630;
   var MAIN_PIN_VALUE_LEFT = 570;
   var MAIN_PIN_VALUE_TOP = 375;
   var map = document.querySelector('.map');
@@ -19,19 +25,19 @@
   }
 
   function correctPinX(x) {
-    if (x < 0 - window.pin.WIDTH_PIN / 2) {
-      x = 0 - window.pin.WIDTH_PIN / 2;
-    } else if (x > 1200 - window.pin.WIDTH_PIN / 2) {
-      x = 1200 - window.pin.WIDTH_PIN / 2;
+    if (x < WINDOW_START_X - WIDTH_MAIN_PIN / 2) {
+      x = WINDOW_START_X - WIDTH_MAIN_PIN / 2;
+    } else if (x > WINDOW_END_X - WIDTH_MAIN_PIN / 2) {
+      x = WINDOW_END_X - WIDTH_MAIN_PIN / 2;
     }
     return x;
   }
 
   function correctPinY(y) {
-    if (y < 0) {
-      y = 0;
-    } else if (y > 705 - window.pin.HEIGHT_PIN) {
-      y = 705 - window.pin.HEIGHT_PIN;
+    if (y < WINDOW_START_Y - HEIGHT_MAIN_PIN) {
+      y = WINDOW_START_Y - HEIGHT_MAIN_PIN;
+    } else if (y > WINDOW_END_Y - HEIGHT_MAIN_PIN) {
+      y = WINDOW_END_Y - HEIGHT_MAIN_PIN;
     }
     return y;
   }
@@ -126,8 +132,8 @@
   window.map = {
     getCoordinates: function () {
       return {
-        x: mainPin.offsetLeft + window.pin.WIDTH_PIN / 2,
-        y: mainPin.offsetTop + window.pin.HEIGHT_PIN
+        x: mainPin.offsetLeft + WIDTH_MAIN_PIN / 2,
+        y: mainPin.offsetTop + HEIGHT_MAIN_PIN
       };
     },
 
@@ -136,7 +142,7 @@
 
       for (var i = 0; i < info.length; i++) {
         if (info[i].offer) {
-          pinFragment.appendChild(window.pin.generatePin(info[i]));
+          pinFragment.appendChild(window.generatePin(info[i]));
         }
       }
 

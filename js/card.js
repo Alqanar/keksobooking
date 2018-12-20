@@ -13,7 +13,7 @@
   function getCaseForRoom(numRoom) {
     if (numRoom === 1) {
       return 'комната';
-    } else if (numRoom === 5) {
+    } else if (numRoom === 0 || numRoom >= 5) {
       return 'комнат';
     }
     return 'комнаты';
@@ -62,12 +62,12 @@
   }
 
   function documentEscPressHandler(event) {
-    window.general.isEscEvent(event, closePopup);
+    window.general.isEscEvent(event, closePopupHandler);
   }
 
   var closeCardCallback = null;
 
-  function closePopup() {
+  function closePopupHandler() {
     clonedCard.remove();
     if (closeCardCallback) {
       closeCardCallback();
@@ -95,7 +95,7 @@
       fillPhoto(cardData.offer.photos, photosContainer);
       document.addEventListener('keydown', documentEscPressHandler);
 
-      popupClose.addEventListener('click', closePopup);
+      popupClose.addEventListener('click', closePopupHandler);
 
       return clonedCard;
     },

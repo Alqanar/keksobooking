@@ -11,18 +11,18 @@
       cloneMessage.querySelector('.error__message').textContent = message;
     }
 
-    function closeMessage() {
+    function closeMessageHandler() {
       document.querySelector(isError ? '.error' : '.success').remove();
-      document.removeEventListener('click', closeMessage);
+      document.removeEventListener('click', closeMessageHandler);
     }
 
     function closeMessageEscHandler(event) {
-      window.general.isEscEvent(event, closeMessage);
+      window.general.isEscEvent(event, closeMessageHandler);
       document.removeEventListener('keydown', closeMessageEscHandler);
     }
 
     document.querySelector('main').appendChild(cloneMessage);
     document.addEventListener('keydown', closeMessageEscHandler);
-    document.addEventListener('click', closeMessage);
+    document.addEventListener('click', closeMessageHandler);
   };
 })();

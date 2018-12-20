@@ -1,6 +1,11 @@
 'use strict';
 
 (function () {
+  var minPrices = {
+    bungalo: '0',
+    flat: '1000',
+    house: '5000',
+    palace: '10000'};
   var formAd = document.querySelector('.ad-form');
   var fieldAddress = document.querySelector('#address');
   var price = document.querySelector('#price');
@@ -10,14 +15,9 @@
   var timeOut = document.querySelector('#timeout');
   var numberRoom = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
-  var minPrices = {
-    bungalo: '0',
-    flat: '1000',
-    house: '5000',
-    palace: '10000'};
   var submitBtnClickCallback = null;
   var resetBtnClickCallback = null;
-  var drop = document.querySelector('.ad-form__reset');
+  var resetBtn = document.querySelector('.ad-form__reset');
 
   window.general.switchDisabledField(formAd);
 
@@ -61,7 +61,7 @@
         break;
       case 2:
         condition = capacityInt !== 1 && capacityInt !== 2;
-        label += '2 комнаты возможное количество мест: "для 1 гостя" или "для 2 гостей"';
+        label += '2 комнат возможное количество мест: "для 1 гостя" или "для 2 гостей"';
         break;
       case 3:
         condition = capacityInt === 0;
@@ -104,7 +104,7 @@
     submitBtnClickCallback();
   });
 
-  drop.addEventListener('click', resetForm);
+  resetBtn.addEventListener('click', resetForm);
 
   window.form = {
     setAddress: function (coords) {
