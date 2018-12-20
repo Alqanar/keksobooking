@@ -9,6 +9,7 @@
   var containerPhoto = document.querySelector('.ad-form__photo');
   var parentContainerPhoto = document.querySelector('.ad-form__photo-container');
   var firstClick = true;
+  var avatarPhoto = document.querySelector('.ad-form-header__user-pic');
 
   function processFile(input, image) {
     var file = input.files[0];
@@ -63,10 +64,31 @@
   }
 
   avatarChooser.addEventListener('change', function () {
-    processFile(avatarChooser, document.querySelector('.ad-form-header__user-pic'));
+    processFile(avatarChooser, avatarPhoto);
   });
 
   photoAdChooser.addEventListener('change', function () {
     showPreviewAd();
   });
+
+  window.preview = {
+    clearAvatar: function () {
+      avatarPhoto.src = MUFFIN_URL;
+    },
+    clearPreviewAd: function () {
+      var photosHouse = document.querySelectorAll('.ad-form__photo');
+      var firstImage = containerPhoto.querySelector('img');
+
+      if (photosHouse.length > 1) {
+        for (var i = 1; i < photosHouse.length; i++) {
+          photosHouse[i].remove();
+        }
+      }
+      if (firstImage) {
+        firstImage.remove();
+      }
+
+      firstClick = true;
+    }
+  };
 })();

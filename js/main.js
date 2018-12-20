@@ -23,6 +23,8 @@
   function deactivatePage() {
     window.form.changeStatus();
     window.form.resetForm();
+    window.preview.clearAvatar();
+    window.preview.clearPreviewAd();
     window.map.changeState();
     window.map.clear();
     window.map.setMouseUpCallback(activatePage);
