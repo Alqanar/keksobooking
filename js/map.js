@@ -34,8 +34,8 @@
   }
 
   function correctPinY(y) {
-    if (y < WINDOW_START_Y) {
-      y = WINDOW_START_Y;
+    if (y < WINDOW_START_Y - HEIGHT_MAIN_PIN) {
+      y = WINDOW_START_Y - HEIGHT_MAIN_PIN;
     } else if (y > WINDOW_END_Y - HEIGHT_MAIN_PIN) {
       y = WINDOW_END_Y - HEIGHT_MAIN_PIN;
     }
