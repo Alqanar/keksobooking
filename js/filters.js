@@ -13,7 +13,9 @@
   var features = Array.from(document.querySelectorAll('.map__checkbox'));
   var changeFilterCallback = null;
 
-  function getFilteredData() {
+  window.general.switchDisabledField(form);
+
+  function getFilterdData() {
     var selectsData = selects.reduce(function (obj, elem) {
       obj[elem.name] = elem.value;
       return obj;
@@ -51,14 +53,20 @@
   }
 
   function filterDataHandler() {
-    changeFilterCallback(getFilteredData());
+    changeFilterCallback(getFilterdData());
   }
 
   var debouncedFilerDataHandler = window.general.debounce(filterDataHandler);
 
   form.addEventListener('change', debouncedFilerDataHandler);
 
-  window.setChangeFilterCallback = function (callback) {
-    changeFilterCallback = callback;
+  window.filters = {
+    changeState: function () {
+      window.general.switchDisabledField(form);
+    },
+
+    setChangeCallback: function (callback) {
+      changeFilterCallback = callback;
+    }
   };
 })();

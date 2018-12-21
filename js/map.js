@@ -12,7 +12,6 @@
   var map = document.querySelector('.map');
   var locationPin = document.querySelector('.map__pins');
   var filtersContainer = document.querySelector('.map__filters-container');
-  var filterAd = document.querySelector('.map__filters');
   var mainPin = document.querySelector('.map__pin--main');
   var mouseUpCallback;
   var mouseMoveCallback;
@@ -118,13 +117,12 @@
     removeCard();
   }
 
-  window.general.switchDisabledField(filterAd);
   window.card.setCloseCallback(deleteClassPin);
 
   mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
   locationPin.addEventListener('click', pinClickHandler);
 
-  window.setChangeFilterCallback(function (elems) {
+  window.filters.setChangeCallback(function (elems) {
     clearMapComponents();
     window.map.outputPins(elems);
   });
@@ -151,7 +149,6 @@
 
     changeState: function () {
       map.classList.toggle('map--faded');
-      window.general.switchDisabledField(filterAd);
     },
 
     setMouseMoveCallback: function (callback) {

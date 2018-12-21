@@ -14,6 +14,7 @@
           window.data = data;
           window.general.specifyId(data);
           window.form.changeStatus();
+          window.filters.changeState();
           window.map.changeState();
           window.map.outputPins(window.data.slice(INITIAL_ITEM_INDEX, END_ITEM_INDEX));
         },
@@ -27,7 +28,8 @@
     window.form.changeStatus();
     window.form.reset();
     window.preview.clearAvatar();
-    window.preview.clearPreviewAd();
+    window.preview.clearPhotosHouseAd();
+    window.filters.changeState();
     window.map.changeState();
     window.map.clear();
     window.map.setMouseUpCallback(activatePage);
