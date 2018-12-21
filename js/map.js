@@ -101,10 +101,10 @@
   }
 
   function removePins() {
-    var listMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < listMapPins.length; i++) {
-      listMapPins[i].remove();
-    }
+    var listMapPins = Array.from(document.querySelectorAll('.map__pin:not(.map__pin--main)'));
+    listMapPins.forEach(function (item) {
+      item.remove();
+    });
   }
 
   function deleteClassPin() {

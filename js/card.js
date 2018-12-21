@@ -26,11 +26,12 @@
   function getNewElemFeatures(facts) {
     var fragmentElems = document.createDocumentFragment();
 
-    for (var i = 0; i < facts.length; i++) {
+    facts.forEach(function (item) {
       var newLi = document.createElement('li');
-      newLi.classList.add('popup__feature', 'popup__feature--' + facts[i]);
+      newLi.classList.add('popup__feature', 'popup__feature--' + item);
       fragmentElems.appendChild(newLi);
-    }
+    });
+
     return fragmentElems;
   }
 
