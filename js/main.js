@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  var INITIAL_ITEM_INDEX = 0;
+  var END_ITEM_INDEX = 5;
+
   function recordCoordinates() {
     window.form.setAddress(window.map.getCoordinates());
   }
@@ -12,7 +15,7 @@
           window.general.specifyId(data);
           window.form.changeStatus();
           window.map.changeState();
-          window.map.outputPins(window.data.slice(0, 5));
+          window.map.outputPins(window.data.slice(INITIAL_ITEM_INDEX, END_ITEM_INDEX));
         },
         function (error) {
           window.displayMessage(error, true);

@@ -2,6 +2,8 @@
 
 (function () {
   var ANY_VALUE = 'any';
+  var INITIAL_LIST_ITEM = 0;
+  var END_ITEM = 5;
   var AveragePrice = {
     MIN: 10000,
     MAX: 50000
@@ -45,7 +47,7 @@
       && selectedValueFeatures.every(function (item) {
         return ad.offer.features.includes(item);
       });
-    }).slice(0, 5);
+    }).slice(INITIAL_LIST_ITEM, END_ITEM);
   }
 
   function filterDataHandler() {
