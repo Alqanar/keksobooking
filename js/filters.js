@@ -68,6 +68,6 @@
 
     setChangeCallback: function (callback) {
       changeFilterCallback = callback;
-    },
+    }
   };
 })();
