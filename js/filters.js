@@ -2,8 +2,8 @@
 
 (function () {
   var ANY_VALUE = 'any';
-  var INITIAL_LIST_ITEM = 0;
-  var END_ITEM = 5;
+  var INITIAL_PIN_NUMBER = 0;
+  var MAX_PIN_NUMBER = 5;
   var AveragePrice = {
     MIN: 10000,
     MAX: 50000
@@ -15,7 +15,7 @@
 
   window.general.switchDisabledField(form);
 
-  function getFilterdData() {
+  function getFilteredData() {
     var selectsData = selects.reduce(function (obj, elem) {
       obj[elem.name] = elem.value;
       return obj;
@@ -49,11 +49,11 @@
       && selectedValueFeatures.every(function (item) {
         return ad.offer.features.includes(item);
       });
-    }).slice(INITIAL_LIST_ITEM, END_ITEM);
+    }).slice(INITIAL_PIN_NUMBER, MAX_PIN_NUMBER);
   }
 
   function filterDataHandler() {
-    changeFilterCallback(getFilterdData());
+    changeFilterCallback(getFilteredData());
   }
 
   var debouncedFilerDataHandler = window.general.debounce(filterDataHandler);
