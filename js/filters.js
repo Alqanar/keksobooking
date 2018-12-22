@@ -2,6 +2,8 @@
 
 (function () {
   var ANY_VALUE = 'any';
+  var INITIAL_PIN_NUMBER = 0;
+  var MAX_PIN_NUMBER = 5;
   var AveragePrice = {
     MIN: 10000,
     MAX: 50000
@@ -10,6 +12,8 @@
   var selects = Array.from(document.querySelectorAll('.map__filter'));
   var features = Array.from(document.querySelectorAll('.map__checkbox'));
   var changeFilterCallback = null;
+
+  window.general.switchDisabledField(form);
 
   function getFilteredData() {
     var selectsData = selects.reduce(function (obj, elem) {
@@ -45,7 +49,7 @@
       && selectedValueFeatures.every(function (item) {
         return ad.offer.features.includes(item);
       });
-    }).slice(0, 5);
+    }).slice(INITIAL_PIN_NUMBER, MAX_PIN_NUMBER);
   }
 
   function filterDataHandler() {
@@ -56,7 +60,13 @@
 
   form.addEventListener('change', debouncedFilerDataHandler);
 
-  window.setChangeFilterCallback = function (callback) {
-    changeFilterCallback = callback;
+  window.filters = {
+    changeState: function () {
+      window.general.switchDisabledField(form);
+    },
+
+    setChangeCallback: function (callback) {
+      changeFilterCallback = callback;
+    }
   };
 })();

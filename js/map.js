@@ -12,7 +12,6 @@
   var map = document.querySelector('.map');
   var locationPin = document.querySelector('.map__pins');
   var filtersContainer = document.querySelector('.map__filters-container');
-  var filterAd = document.querySelector('.map__filters');
   var mainPin = document.querySelector('.map__pin--main');
   var mouseUpCallback;
   var mouseMoveCallback;
@@ -21,7 +20,7 @@
 
 
   function outputCard(adObject) {
-    filtersContainer.before(window.card.generateCard(adObject));
+    filtersContainer.before(window.card.generate(adObject));
   }
 
   function correctPinX(x) {
@@ -101,10 +100,10 @@
   }
 
   function removePins() {
-    var listMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < listMapPins.length; i++) {
-      listMapPins[i].remove();
-    }
+    var listMapPins = Array.from(document.querySelectorAll('.map__pin:not(.map__pin--main)'));
+    listMapPins.forEach(function (item) {
+      item.remove();
+    });
   }
 
   function deleteClassPin() {
@@ -118,13 +117,12 @@
     removeCard();
   }
 
-  window.general.switchDisabledField(filterAd);
-  window.card.setCloseCardCallback(deleteClassPin);
+  window.card.setCloseCallback(deleteClassPin);
 
   mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
   locationPin.addEventListener('click', pinClickHandler);
 
-  window.setChangeFilterCallback(function (elems) {
+  window.filters.setChangeCallback(function (elems) {
     clearMapComponents();
     window.map.outputPins(elems);
   });
@@ -151,7 +149,6 @@
 
     changeState: function () {
       map.classList.toggle('map--faded');
-      window.general.switchDisabledField(filterAd);
     },
 
     setMouseMoveCallback: function (callback) {

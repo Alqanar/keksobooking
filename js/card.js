@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var RUS_TYPE = {
+  var rusType = {
     palace: 'Дворец',
     flat: 'Квартира',
     house: 'Дом',
@@ -26,11 +26,12 @@
   function getNewElemFeatures(facts) {
     var fragmentElems = document.createDocumentFragment();
 
-    for (var i = 0; i < facts.length; i++) {
+    facts.forEach(function (item) {
       var newLi = document.createElement('li');
-      newLi.classList.add('popup__feature', 'popup__feature--' + facts[i]);
+      newLi.classList.add('popup__feature', 'popup__feature--' + item);
       fragmentElems.appendChild(newLi);
-    }
+    });
+
     return fragmentElems;
   }
 
@@ -75,7 +76,7 @@
   }
 
   window.card = {
-    generateCard: function (cardData) {
+    generate: function (cardData) {
       clonedCard = mapCard.cloneNode(true);
       var featuresContainer = clonedCard.querySelector('.popup__features');
       var photosContainer = clonedCard.querySelector('.popup__photos');
@@ -85,7 +86,7 @@
       clonedCard.querySelector('.popup__title').textContent = cardData.offer.title;
       clonedCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
       clonedCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
-      clonedCard.querySelector('.popup__type').textContent = RUS_TYPE[cardData.offer.type];
+      clonedCard.querySelector('.popup__type').textContent = rusType[cardData.offer.type];
       clonedCard
         .querySelector('.popup__text--capacity')
         .textContent = cardData.offer.rooms + ' ' + getCaseForRoom(cardData.offer.rooms) + ' для ' + cardData.offer.guests + ' ' + getCaseForGuest(cardData.offer.guests);
@@ -100,7 +101,7 @@
       return clonedCard;
     },
 
-    setCloseCardCallback: function (callback) {
+    setCloseCallback: function (callback) {
       closeCardCallback = callback;
     }
   };

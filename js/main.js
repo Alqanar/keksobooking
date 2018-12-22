@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  var INITIAL_ITEM_INDEX = 0;
+  var END_ITEM_INDEX = 5;
+
   function recordCoordinates() {
     window.form.setAddress(window.map.getCoordinates());
   }
@@ -11,8 +14,9 @@
           window.data = data;
           window.general.specifyId(data);
           window.form.changeStatus();
+          window.filters.changeState();
           window.map.changeState();
-          window.map.outputPins(window.data.slice(0, 5));
+          window.map.outputPins(window.data.slice(INITIAL_ITEM_INDEX, END_ITEM_INDEX));
         },
         function (error) {
           window.displayMessage(error, true);
@@ -22,7 +26,10 @@
 
   function deactivatePage() {
     window.form.changeStatus();
-    window.form.resetForm();
+    window.form.reset();
+    window.preview.clearAvatar();
+    window.preview.clearPhotosHouseAd();
+    window.filters.changeState();
     window.map.changeState();
     window.map.clear();
     window.map.setMouseUpCallback(activatePage);
@@ -31,7 +38,7 @@
 
   function sendDataForm() {
     window.backend.sendData(
-        window.form.getFormData(),
+        window.form.getData(),
         function () {
           window.displayMessage();
           deactivatePage();

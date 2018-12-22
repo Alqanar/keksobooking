@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var REQUEST_TIMEOUT = 1000;
   var DATA_SOURSE_URL = 'https://js.dump.academy/keksobooking/data';
   var DATA_SENDING_URL = 'https://js.dump.academy/keksobooking';
   var Code = {
@@ -45,7 +46,7 @@
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
-    xhr.timeout = 1000;
+    xhr.timeout = REQUEST_TIMEOUT;
 
     xhr.open(params.type, params.url);
     xhr.send(params.facts ? params.facts : undefined);
