@@ -62,11 +62,12 @@
 
   window.filters = {
     changeState: function () {
+      form.reset();
       window.general.switchDisabledField(form);
     },
 
     setChangeCallback: function (callback) {
       changeFilterCallback = callback;
-    }
+    },
   };
 })();
