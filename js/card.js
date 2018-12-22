@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var RusType = {
+  var rusType = {
     palace: 'Дворец',
     flat: 'Квартира',
     house: 'Дом',
@@ -86,7 +86,7 @@
       clonedCard.querySelector('.popup__title').textContent = cardData.offer.title;
       clonedCard.querySelector('.popup__text--address').textContent = cardData.offer.address;
       clonedCard.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
-      clonedCard.querySelector('.popup__type').textContent = RusType[cardData.offer.type];
+      clonedCard.querySelector('.popup__type').textContent = rusType[cardData.offer.type];
       clonedCard
         .querySelector('.popup__text--capacity')
         .textContent = cardData.offer.rooms + ' ' + getCaseForRoom(cardData.offer.rooms) + ' для ' + cardData.offer.guests + ' ' + getCaseForGuest(cardData.offer.guests);
