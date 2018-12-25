@@ -9,6 +9,8 @@
   var containerPhoto = document.querySelector('.ad-form__photo');
   var parentContainerPhoto = document.querySelector('.ad-form__photo-container');
   var firstClick = true;
+  var firstImage = null;
+  var photos = [];
   var avatarPhoto = document.querySelector('.ad-form-header__user-pic');
 
   function processFile(input, image) {
@@ -40,6 +42,7 @@
 
     if (firstClick) {
       imageNode = document.createElement('img');
+      firstImage = imageNode;
       photoNode = containerPhoto;
 
       imageNode.alt = 'фотография жилья';
@@ -53,6 +56,7 @@
     } else {
       photoNode = containerPhoto.cloneNode(true);
       imageNode = photoNode.querySelector('img');
+      photos.push(photoNode);
     }
 
     imageNode.src = MUFFIN_URL;
@@ -75,17 +79,16 @@
     clearAvatar: function () {
       avatarPhoto.src = MUFFIN_URL;
     },
-    clearPhotosHouseAd: function () {
-      var photosHouse = document.querySelectorAll('.ad-form__photo');
-      var firstImage = containerPhoto.querySelector('img');
 
-      if (photosHouse.length > 1) {
-        for (var i = 1; i < photosHouse.length; i++) {
-          photosHouse[i].remove();
-        }
-      }
+    clearPhotosHouseAd: function () {
+      photos.forEach(function (item) {
+        item.remove();
+        photos = [];
+      });
+
       if (firstImage) {
         firstImage.remove();
+        firstImage = null;
       }
 
       firstClick = true;

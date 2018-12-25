@@ -12,7 +12,7 @@
     }
 
     function closeMessageHandler() {
-      document.querySelector(isError ? '.error' : '.success').remove();
+      cloneMessage.remove();
       document.removeEventListener('click', closeMessageHandler);
     }
 

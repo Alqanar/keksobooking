@@ -15,12 +15,16 @@
   var mainPin = document.querySelector('.map__pin--main');
   var mouseUpCallback;
   var mouseMoveCallback;
+  var lastOpenedCard = null;
   var lastClickedPin = null;
   var activeClassPin = 'map__pin--active';
+  var pins = [];
 
 
   function outputCard(adObject) {
-    filtersContainer.before(window.card.generate(adObject));
+    var card = window.card.generate(adObject);
+    lastOpenedCard = card;
+    filtersContainer.before(card);
   }
 
   function correctPinX(x) {
@@ -81,9 +85,9 @@
   }
 
   function removeCard() {
-    var cardAd = document.querySelector('.map__card');
-    if (cardAd) {
-      cardAd.remove();
+    if (lastOpenedCard) {
+      lastOpenedCard.remove();
+      lastOpenedCard = null;
     }
   }
 
@@ -100,10 +104,10 @@
   }
 
   function removePins() {
-    var listMapPins = Array.from(document.querySelectorAll('.map__pin:not(.map__pin--main)'));
-    listMapPins.forEach(function (item) {
+    pins.forEach(function (item) {
       item.remove();
     });
+    pins = [];
   }
 
   function deleteClassPin() {
@@ -138,11 +142,13 @@
     outputPins: function (info) {
       var pinFragment = document.createDocumentFragment();
 
-      for (var i = 0; i < info.length; i++) {
-        if (info[i].offer) {
-          pinFragment.appendChild(window.generatePin(info[i]));
+      info.forEach(function (item) {
+        if (item.offer) {
+          var pin = window.generatePin(item);
+          pins.push(pin);
+          pinFragment.appendChild(pin);
         }
-      }
+      });
 
       return locationPin.appendChild(pinFragment);
     },

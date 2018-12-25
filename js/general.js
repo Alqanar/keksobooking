@@ -6,11 +6,11 @@
 
   window.general = {
     switchDisabledField: function (element) {
-      var elems = element.querySelectorAll('.' + element.className.replace(' ', '.') + ' > *');
+      var elems = Array.from(element.querySelectorAll('.' + element.className.replace(' ', '.') + ' > *'));
 
-      for (var i = 0; i < elems.length; i++) {
-        elems[i].disabled = !elems[i].disabled;
-      }
+      elems.forEach(function (item) {
+        item.disabled = !item.disabled;
+      });
     },
 
     isEscEvent: function (event, action) {
@@ -20,9 +20,9 @@
     },
 
     specifyId: function (info) {
-      for (var i = 0; i < info.length; i++) {
-        info[i].id = i;
-      }
+      info.forEach(function (item, index) {
+        item.id = index;
+      });
     },
 
     debounce: function (cb) {

@@ -49,14 +49,15 @@
     var elemPhoto = photosContainer.querySelector('img');
 
     if (photos.length) {
-      elemPhoto.src = photos[0];
-
-      for (var i = 1; i < photos.length; i++) {
-        var anotherPhoto = elemPhoto.cloneNode();
-
-        anotherPhoto.src = photos[i];
-        photosContainer.appendChild(anotherPhoto);
-      }
+      photos.forEach(function (item, index) {
+        if (index === 0) {
+          elemPhoto.src = item;
+        } else {
+          var anotherPhoto = elemPhoto.cloneNode();
+          anotherPhoto.src = item;
+          photosContainer.appendChild(anotherPhoto);
+        }
+      });
     } else {
       photosContainer.classList.add('visually-hidden');
     }
